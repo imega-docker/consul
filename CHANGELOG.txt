@@ -1,0 +1,4 @@
+### 0.5.2
+
+  * Use base image on alpine 3.4
+  * Consul 0.5.2-r1
