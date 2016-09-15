@@ -1,6 +1,7 @@
 # Build rootfs for consul
 
 DOCKER_RM = false
+MOCK_SERVER_CONSUL_PORT = -p 8500:8500
 
 build:
 	@docker run --rm \
