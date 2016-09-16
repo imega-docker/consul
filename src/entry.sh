@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-#while [[ "`consul info | grep 'leader = true' | sed 's/	//g'`" != "leader = true" ]]; do \
-#    echo "."; sleep 0.3; \
-#done
-
 MOCK_SERVER_CONSUL="127.0.0.1:8500"
 
 function import() {

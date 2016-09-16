@@ -1,7 +1,7 @@
 # Build rootfs for consul
 
 DOCKER_RM = false
-MOCK_SERVER_CONSUL_PORT = -p 8505:8500
+MOCK_SERVER_CONSUL_PORT = -p 8500:8500
 
 build:
 	@docker run --rm \
@@ -14,10 +14,17 @@ build:
 test: build
 	@docker build -t imega/consul:test .
 
-	docker run -d \
+	@docker run -d \
 		$(MOCK_SERVER_CONSUL_PORT) \
 		-v $(CURDIR)/tests/fixtures:/data \
-		--name=mock_server_consul1 \
+		--name=mock_server_consul \
 		imega/consul:test
+
+	@docker run --rm=$(DOCKER_RM) \
+		-v $(CURDIR)/tests:/data \
+		-w /data \
+		--link mock_server_consul:consul \
+		alpine \
+		sh -c 'apk add --update bash curl && ./test.sh consul:8500'
 
 .PHONY: build
