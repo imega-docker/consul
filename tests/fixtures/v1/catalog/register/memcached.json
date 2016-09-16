@@ -1,0 +1,15 @@
+{
+  "Datacenter": "dc1",
+  "Node": "node1",
+  "Address": "192.168.0.1",
+  "Service": {
+    "ID": "memcached",
+    "Service": "memcached",
+    "Tags": [
+      "memcached"
+    ],
+    "Address": "memcached",
+    "Port": 11211
+  }
+}
+
