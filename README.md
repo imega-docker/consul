@@ -1,6 +1,6 @@
 # Consul
 
-This is docker image to run the (https://www.consul.io/)[Consul].
+This is docker image to run the [Consul](https://www.consul.io/).
 
 [![](https://images.microbadger.com/badges/image/imega/consul.svg)](http://microbadger.com/images/imega/consul "Get your own image badge on microbadger.com") [![CircleCI](https://circleci.com/gh/imega-docker/consul.svg?style=svg)](https://circleci.com/gh/imega-docker/consul) [![GitHub stars](https://img.shields.io/github/stars/badges/shields.svg?style=social&label=Star&maxAge=2592000)](https://github.com/imega-docker/consul)
 
