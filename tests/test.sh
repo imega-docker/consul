@@ -53,6 +53,10 @@ testUser() {
     assertTrue "root" $ACTUAL "$FUNCNAME"
 }
 
+while [[ "`curl -s http://$URL/v1/status/leader --write-out %{http_code} --silent --output /dev/null`" != "200" || "`curl -s http://$URL/v1/status/leader`" == "\"\"" ]]; do \
+    echo "."; sleep 0.3; \
+done
+
 testDbname
 testHost
 testPassword
