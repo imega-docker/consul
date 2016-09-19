@@ -32,7 +32,7 @@ fixtures
 ### Run consul
 
 ```
-docker run -d -v `pwd`/fixtures:/data imega/consul
+docker run -d -v `pwd`/fixtures:/data -p 8500:8500 imega/consul
 ```
 
 ### Check value
