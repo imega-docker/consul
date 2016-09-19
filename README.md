@@ -12,7 +12,35 @@ Consul: 0.7.0-r0
 
 ## Usage
 
+You need to create a fixture in the form of a directory tree. A value to be written to a file.
 
+e.g. *http://consul:8500/v1/kv/service/mysql/host*
+
+```
+fixtures
+ |- v1
+    |- kv
+        |- service
+            |- mysql
+                |- host
+```
+
+`mkdir -p fixtures/v1/kv/service/mysql/host`
+
+`echo "my-host-mysql" >> fixtures/v1/kv/service/mysql/host/value.json`
+
+### Run consul
+
+```
+docker run -d -v `pwd`/fixtures:/data imega/consul
+```
+
+### Check value
+```
+$ curl http://consul:8500/v1/kv/service/mysql/host?raw
+my-host-mysql
+$
+```
 
 ## Alpine Packages
   - musl (1.1.14-r11)
