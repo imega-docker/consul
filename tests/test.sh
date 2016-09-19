@@ -54,8 +54,10 @@ testUser() {
 }
 
 while [[ "`curl -s http://$URL/v1/status/leader --write-out %{http_code} --silent --output /dev/null`" != "200" || "`curl -s http://$URL/v1/status/leader`" == "\"\"" ]]; do \
-    echo "."; sleep 0.3; \
+    sleep 0.3; \
 done
+
+sleep 1;
 
 testDbname
 testHost

@@ -24,9 +24,11 @@ function import() {
     done <<< "$FIXTURES"
 }
 
-until [[ "`sleep 0.3;consul info | grep 'leader = true' | sed 's/	//g'`" == "leader = true" ]]; do \
-    import; \
+while `sleep 0.3;true`; do \
+    if [[ `consul info | grep -e "leader = true" -e "state = Leader" | tr '\t\n' ' ' | sed 's/ //g'` == "leader=truestate=Leader" ]]; then \
+        import; \
+        break; \
+    fi; \
 done &
 
 consul agent -client=0.0.0.0 -dev
-
