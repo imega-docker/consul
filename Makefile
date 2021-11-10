@@ -1,30 +1,41 @@
-# Build rootfs for consul
+test: build
+	IMAGE=$(IMAGE) TAG=$(TAG) ARCH=$(ARCH) docker-compose up -d --build --scale acceptance=0
+	IMAGE=$(IMAGE) TAG=$(TAG) ARCH=$(ARCH) docker-compose up --abort-on-container-exit acceptance
 
-DOCKER_RM = false
-MOCK_SERVER_CONSUL_PORT = -p 8500:8500
+IMAGE=imega/consul
+TAG=latest
+ARCH=$(shell uname -m)
 
-build:
+ifeq ($(ARCH),aarch64)
+        ARCH=arm64
+endif
+
+ifeq ($(ARCH),x86_64)
+        ARCH=amd64
+endif
+
+build: buildfs
+	@docker build -t $(IMAGE):$(TAG)-$(ARCH) .
+	@docker tag $(IMAGE):$(TAG)-$(ARCH) $(IMAGE):latest-$(ARCH)
+
+buildfs:
 	@docker run --rm \
+		-v $(CURDIR)/src:/src \
 		-v $(CURDIR)/runner:/runner \
 		-v $(CURDIR)/build:/build \
-		-v $(CURDIR)/src:/src \
 		imega/base-builder \
-		--packages="bash curl jq consul@testing"
+		--packages="busybox bash curl jq consul@edge-community"
 
-test: build
-	@docker build -t imega/consul:test .
+login:
+	@docker login --username $(DOCKER_USER) --password $(DOCKER_PASS)
 
-	@docker run -d \
-		$(MOCK_SERVER_CONSUL_PORT) \
-		-v $(CURDIR)/tests/fixtures:/data \
-		--name=mock_server_consul \
-		imega/consul:test
+release: login
+	@docker scan $(IMAGE):$(TAG)-$(ARCH)
+	@docker push $(IMAGE):$(TAG)-$(ARCH)
+	@docker push $(IMAGE):latest-$(ARCH)
 
-	@docker run --rm=$(DOCKER_RM) \
-		-v $(CURDIR)/tests:/data \
-		-w /data \
-		--link mock_server_consul:consul \
-		alpine \
-		sh -c 'apk add --update bash curl && ./test.sh consul:8500'
-
-.PHONY: build
+release-manifest: login
+	@docker manifest create $(IMAGE):$(TAG) $(IMAGE):$(TAG)-amd64 $(IMAGE):$(TAG)-ppc64le $(IMAGE):$(TAG)-arm64
+	@docker manifest create $(IMAGE):latest $(IMAGE):latest-amd64 $(IMAGE):latest-ppc64le $(IMAGE):latest-arm64
+	@docker manifest push $(IMAGE):$(TAG)
+	@docker manifest push $(IMAGE):latest

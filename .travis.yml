@@ -1,0 +1,54 @@
+branches:
+  only:
+    - master
+language: ruby
+services:
+  - docker
+
+env:
+  global:
+    - IMAGE=imega/consul
+    - NV=`curl --silent "https://git.alpinelinux.org/aports/plain/community/consul/APKBUILD" | grep pkgver= | sed 's/pkgver=//g'`
+
+stages:
+  - Arch-Build
+  - Manifest-Release
+
+jobs:
+  include:
+    - stage: Arch-Build
+      arch: amd64
+      os: linux
+      script:
+        - RELEASE=0
+        - docker pull $IMAGE:$NV-$TRAVIS_CPU_ARCH || RELEASE=1
+        - make build IMAGE=$IMAGE TAG=$NV || exit 1
+      after_success:
+        - "[ ${RELEASE} == 1 ] && (make release DOCKER_USER=$DOCKER_USER DOCKER_PASS=$DOCKER_PASS IMAGE=$IMAGE TAG=$NV)"
+
+    - stage: Arch-Build
+      arch: ppc64le
+      os: linux
+      script:
+        - RELEASE=0
+        - docker pull $IMAGE:$NV-$TRAVIS_CPU_ARCH || RELEASE=1
+        - make build IMAGE=$IMAGE TAG=$NV || exit 1
+      after_success:
+        - "[ ${RELEASE} == 1 ] && (make release DOCKER_USER=$DOCKER_USER DOCKER_PASS=$DOCKER_PASS IMAGE=$IMAGE TAG=$NV)"
+
+    - stage: Arch-Build
+      arch: arm64
+      os: linux
+      script:
+        - RELEASE=0
+        - docker pull $IMAGE:$NV-$TRAVIS_CPU_ARCH || RELEASE=1
+        - make build IMAGE=$IMAGE TAG=$NV || exit 1
+      after_success:
+        - "[ ${RELEASE} == 1 ] && (make release DOCKER_USER=$DOCKER_USER DOCKER_PASS=$DOCKER_PASS IMAGE=$IMAGE TAG=$NV)"
+
+    - stage: Manifest-Release
+      arch: amd64
+      os: linux
+      script:
+        - export DOCKER_CLI_EXPERIMENTAL=enabled
+        - "make release-manifest DOCKER_USER=$DOCKER_USER DOCKER_PASS=$DOCKER_PASS IMAGE=$IMAGE TAG=$NV"

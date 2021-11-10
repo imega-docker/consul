@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  consul:
+    image: imega/consul:latest-arm64
+    volumes:
+      - ./tests:/data
+    ports:
+      - 8500:8500
+
+  acceptance:
+    image: alpine
+    volumes:
+      - ./tests:/data
+    working_dir: /data
+    command: >
+      /bin/sh -c "apk add --update bash curl && ./test.sh consul:8500"

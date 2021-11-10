@@ -6,15 +6,13 @@ This is docker image to run the [Consul](https://www.consul.io/).
 
 Image size: 33 MB
 
-From image: alpine:3.4
-
 Consul: 0.7.0-r0
 
 ## Usage
 
 You need to create a fixture in the form of a directory tree. A value to be written to a file.
 
-e.g. *http://consul:8500/v1/kv/service/mysql/host*
+e.g. _http://consul:8500/v1/kv/service/mysql/host_
 
 ```
 fixtures
@@ -36,6 +34,7 @@ docker run -d -v `pwd`/fixtures:/data -p 8500:8500 imega/consul
 ```
 
 ### Check value
+
 ```
 $ curl http://consul:8500/v1/kv/service/mysql/host?raw
 my-host-mysql
@@ -43,22 +42,23 @@ $
 ```
 
 ## Alpine Packages
-  - musl (1.1.14-r11)
-  - busybox (1.24.2-r11)
-  - ncurses-terminfo-base (6.0-r7)
-  - ncurses-terminfo (6.0-r7)
-  - ncurses-libs (6.0-r7)
-  - readline (6.3.008-r4)
-  - bash (4.3.42-r3)
-  - consul (0.7.0-r0)
-  - zlib (1.2.8-r2)
-  - libcrypto1.0 (1.0.2h-r2)
-  - ca-certificates (20160104-r4)
-  - libssl1.0 (1.0.2h-r2)
-  - libssh2 (1.7.0-r0)
-  - libcurl (7.50.2-r0)
-  - curl (7.50.2-r0)
-  - jq (1.5-r1)
+
+-   musl (1.1.14-r11)
+-   busybox (1.24.2-r11)
+-   ncurses-terminfo-base (6.0-r7)
+-   ncurses-terminfo (6.0-r7)
+-   ncurses-libs (6.0-r7)
+-   readline (6.3.008-r4)
+-   bash (4.3.42-r3)
+-   consul (0.7.0-r0)
+-   zlib (1.2.8-r2)
+-   libcrypto1.0 (1.0.2h-r2)
+-   ca-certificates (20160104-r4)
+-   libssl1.0 (1.0.2h-r2)
+-   libssh2 (1.7.0-r0)
+-   libcurl (7.50.2-r0)
+-   curl (7.50.2-r0)
+-   jq (1.5-r1)
 
 ## The MIT License (MIT)
 

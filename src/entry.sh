@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# set -x
 
 MOCK_SERVER_CONSUL="127.0.0.1:8500"
 
@@ -8,7 +9,7 @@ function import() {
         for i in "${ADDR[@]}"; do
             DIRNAME=$(dirname $i)
             VALUE=$(cat "$i")
-            curl -s -X PUT -d "$VALUE" http://$MOCK_SERVER_CONSUL${DIRNAME:5}
+            curl -s -X PUT -d "$VALUE" http://$MOCK_SERVER_CONSUL${DIRNAME:14}
             echo " - "${DIRNAME:5}
         done
     done <<< "$FIXTURES"
@@ -18,7 +19,7 @@ function import() {
         for i in "${ADDR[@]}"; do
             DIRNAME=$(dirname $i)
             VALUE=$(cat "$i" | jq -c .)
-            curl -s -X PUT -d "$VALUE" http://$MOCK_SERVER_CONSUL${DIRNAME:5}
+            curl -s -X PUT -d "$VALUE" http://$MOCK_SERVER_CONSUL${DIRNAME:14}
             echo " - "${DIRNAME:5}
         done
     done <<< "$FIXTURES"
