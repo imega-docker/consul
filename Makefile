@@ -30,7 +30,7 @@ login:
 	@docker login --username $(DOCKER_USER) --password $(DOCKER_PASS)
 
 release: login
-	@docker scan $(IMAGE):$(TAG)-$(ARCH)
+	@-docker scan $(IMAGE):$(TAG)-$(ARCH)
 	@docker push $(IMAGE):$(TAG)-$(ARCH)
 	@docker push $(IMAGE):latest-$(ARCH)
 
