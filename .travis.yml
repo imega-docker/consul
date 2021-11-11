@@ -5,18 +5,10 @@ language: ruby
 services:
   - docker
 
-before_install:
-  - sudo mkdir -p /usr/local/share/ca-certificates/
-  - wget https://entrust.com/root-certificates/entrust_l1k.cer
-  - openssl x509 -in entrust_l1k.cer -out entrust_l1k.crt
-  - sudo mv entrust_l1k.crt /usr/local/share/ca-certificates/
-  - sudo update-ca-certificates
-  - rm entrust_l1k.cer
-
 env:
   global:
     - IMAGE=imega/consul
-    - NV=`curl --silent "https://git.alpinelinux.org/aports/plain/community/consul/APKBUILD" | grep pkgver= | sed 's/pkgver=//g'`
+    - NV=`curl --insecure --silent "https://git.alpinelinux.org/aports/plain/community/consul/APKBUILD" | grep pkgver= | sed 's/pkgver=//g'`
 
 stages:
   - Arch-Build
